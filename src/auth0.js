@@ -13,32 +13,39 @@ export const Auth0Provider = ({
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState();
   const [user, setUser] = useState();
+  const [errorMsg, setErrorMsg] = useState();
   const [auth0Client, setAuth0] = useState();
   const [loading, setLoading] = useState(true);
   const [popupOpen, setPopupOpen] = useState(false);
 
   useEffect(() => {
     const initAuth0 = async () => {
-      const auth0FromHook = await createAuth0Client(initOptions);
-      setAuth0(auth0FromHook);
+      try {
+        const auth0FromHook = await createAuth0Client(initOptions);
+        setAuth0(auth0FromHook);
 
-      if (window.location.search.includes("code=") &&
-          window.location.search.includes("state=")) {
-        const { appState } = await auth0FromHook.handleRedirectCallback();
-        onRedirectCallback(appState);
+        if (window.location.search.includes("code=") &&
+            window.location.search.includes("state=")) {
+          const { appState } = await auth0FromHook.handleRedirectCallback();
+          onRedirectCallback(appState);
+        }
+
+        const isAuthenticated = await auth0FromHook.isAuthenticated();
+
+        setIsAuthenticated(isAuthenticated);
+
+        if (isAuthenticated) {
+          const user = await auth0FromHook.getUser();
+          user.user_metadata = user['https://traverbal.november-project.com/user_metadata'];
+          setUser(user);
+        }
+
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setErrorMsg('Sorry! Something went wrong. Try to login again or contact Tony.');
+        setLoading(false);
       }
-
-      const isAuthenticated = await auth0FromHook.isAuthenticated();
-
-      setIsAuthenticated(isAuthenticated);
-
-      if (isAuthenticated) {
-        const user = await auth0FromHook.getUser();
-        user.user_metadata = user['https://traverbal.november-project.com/user_metadata'];
-        setUser(user);
-      }
-
-      setLoading(false);
     };
     initAuth0();
     // eslint-disable-next-line
@@ -73,6 +80,7 @@ export const Auth0Provider = ({
       value={{
         isAuthenticated,
         user,
+        errorMsg,
         setUser,
         loading,
         popupOpen,

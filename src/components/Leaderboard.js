@@ -7,8 +7,12 @@ import useGlobalState from "../utils/GlobalState";
 import "./Leaderboard.css";
 
 const Leaderboard = props => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, errorMsg } = useAuth0();
   const { cities, users, loading, imageUrl } = useGlobalState();
+
+  if (errorMsg) {
+    return <div className="text-danger">{errorMsg}</div>;
+  }
 
   if (loading) {
     return <div className="loading">Loading...</div>;
