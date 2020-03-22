@@ -39,9 +39,9 @@ const Leaderboard = props => {
                     <span className="name">{`${user.name} (${user.city})`}</span>
                   </div>
                   <div className="badge-list">
-                    { _.take(_.reverse(_.sortBy(
+                    { _.take(_.reverse(_.filter(_.sortBy(
                       Object.keys(user.badges)
-                      .map( b => ({ key: b, value: user.badges[b] })), 'value')), 4)
+                      .map( b => ({ key: b, value: user.badges[b] })), 'value'), b => b.value > 0)), 4)
                       .map( (b, i) => {
                         if (i < 3) {
                           const image = _.find(cities, { name: b.key }).image;
