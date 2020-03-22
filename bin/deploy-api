@@ -1,4 +1,4 @@
 #!/bin/bash
 
 gcloud builds submit --tag gcr.io/traverbal/api-image
-gcloud run deploy --image gcr.io/traverbal/api-image --platform managed
+gcloud run deploy traverbal-api --image gcr.io/traverbal/api-image --platform managed
