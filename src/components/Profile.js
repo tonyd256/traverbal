@@ -29,10 +29,10 @@ const useProfileForm = callback => {
         },
         body: JSON.stringify({
           id: user.sub,
-          name,
-          email,
+          name: name.trim(),
+          email: email.trim(),
           user_metadata: {
-            city,
+            city: city.trim(),
           }
         })
       });
