@@ -41,7 +41,7 @@ const Leaderboard = props => {
         <div className="row">
           <div className="col-sm">
             <ul className="leaderboard">
-              { _.sortBy(users, u => _.sum(Object.values(u.badges))).map( (user, key) => (
+              { _.reverse(_.sortBy(users, u => _.sum(Object.values(u.badges)))).map( (user, key) => (
                 <li className="user" key={key}><Link to={`/profile/${user.id}`}>
                   <div>
                     <img
