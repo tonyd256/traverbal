@@ -198,7 +198,7 @@ const Profile = props => {
   const { cities, loading: loadingCities, imageUrl } = useGlobalState();
 
   if (loadingCities || loading || !user) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   return (

@@ -18,7 +18,7 @@ const About = () => (
             other cities!
           </p>
           <p>
-            Signup and Login are passwordless. This meeans that we just use your
+            Signup and Login are passwordless. This means that we just use your
             email to verify you and that gets you in. We don't use your email
             for anything else. All you data is securely stored with the service,
             Auth0.

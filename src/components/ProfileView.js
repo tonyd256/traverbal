@@ -11,7 +11,7 @@ const ProfileView = props => {
   const user = _.find(users, { id });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   if (!user) {

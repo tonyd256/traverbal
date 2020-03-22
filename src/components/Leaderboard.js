@@ -17,7 +17,12 @@ const Leaderboard = props => {
       <div className="container">
         <div className="row">
           <div className="col text-center">
-            <Link to="/about">What is this?</Link>
+            <Link to="/about">What is this website?</Link>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col text-center">
+            <h2>Leaderboard</h2>
           </div>
         </div>
         <div className="row">
