@@ -23,6 +23,7 @@ const About = () => (
             for anything else. All you data is securely stored with the service,
             Auth0.
           </p>
+            <a href="https://november-project.com/np_continues" target="_blank" rel="noopener noreferrer"><h4>NP All Cities Virtual Workout Schedule</h4></a>
         </div>
       </div>
     </div>
