@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as Sentry from '@sentry/browser';
+import * as Integrations from '@sentry/integrations';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -7,6 +9,14 @@ import { Auth0Provider } from './auth0';
 import config from './auth_config.json';
 import history from './utils/history';
 import { GlobalStateProvider } from './utils/GlobalState';
+
+Sentry.init({
+  dsn: "https://f3e4f644b7b049ebb2c5f6432ee4b2c7@sentry.io/5171046",
+  integrations: [
+    new Integrations.ExtraErrorData(),
+    new Integrations.CaptureConsole({ levels: ['error'] }),
+  ]
+});
 
 // A function that routes the user to the right place
 // after login
