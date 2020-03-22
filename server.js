@@ -4,6 +4,7 @@ const jwt = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
 const Auth0 = require("auth0");
 const Imagekit = require("imagekit");
+const cities = require("./cities");
 
 require('dotenv').config();
 
@@ -11,7 +12,8 @@ require('dotenv').config();
 const app = express();
 
 // Accept cross-origin requests from the frontend app
-app.use(cors({ origin: 'http://localhost:3000' }));
+const origin = process.env.SITE_URL || 'http://localhost:3000';
+app.use(cors({ origin }));
 app.use(express.json());
 
 // Set up Auth0 configuration
@@ -72,5 +74,39 @@ app.get("/api/user/photoToken", checkJwt, async (req, res) => {
   }
 });
 
+app.get("/api/cities", async (req, res) => {
+  try {
+    res.send(cities);
+  } catch (err) {
+    res.status(500);
+    res.send({ msg: 'An error occured.' });
+    console.error(err);
+  }
+});
+
+app.get("/api/users", async (req, res) => {
+  try {
+    const users = await auth0.getUsers();
+    const us = users.reduce( (accum, user) => {
+      if (user.user_metadata && user.user_metadata.badges) {
+        return [ ...accum, {
+          id: user.user_id,
+          name: user.name,
+          city: user.user_metadata.city,
+          badges: user.user_metadata.badges,
+          picture: user.picture,
+        }];
+      }
+      return accum;
+    }, []);
+    res.send({ users: us });
+  } catch(err) {
+    res.status(500);
+    res.send({ msg: 'An error occured.' });
+    console.error(err);
+  }
+});
+
 // Start the app
-app.listen(process.env.PORT || 3001, () => console.log('API listening on 3001'));
+const port = process.env.PORT || 3001;
+app.listen(port, () => console.log(`API listening on ${port}`));

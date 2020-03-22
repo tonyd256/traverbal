@@ -1,12 +1,17 @@
 import React, { useState, useRef, Fragment } from "react";
 import { useAuth0 } from "../auth0";
+import useGlobalState from "../utils/GlobalState";
+
+import "./Profile.css";
 
 const useProfileForm = callback => {
   const { user, setUser, getTokenSilently } = useAuth0();
+  const { apiUrl } = useGlobalState();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [picture, setPicture] = useState(user.picture);
-  const [city, setCity] = useState(user.user_metadata && user.user_metadata.city || '');
+  const [badges, setBadges] = useState((user.user_metadata && user.user_metadata.badges) || {});
+  const [city, setCity] = useState((user.user_metadata && user.user_metadata.city) || '');
   const fileUploader = useRef(null);
   const [loadingImg, setLoadingImg] = useState(false);
 
@@ -16,7 +21,7 @@ const useProfileForm = callback => {
     try {
       const accessToken = await getTokenSilently();
 
-      const r = await fetch(`//localhost:3001/api/user`, {
+      const r = await fetch(`${apiUrl}/api/user`, {
         method: 'PATCH',
         headers: {
           authorization: `Bearer ${accessToken}`,
@@ -40,7 +45,6 @@ const useProfileForm = callback => {
 
   const handleChangePhoto = e => {
     e.preventDefault();
-    console.log(fileUploader);
     fileUploader.current.click();
   };
 
@@ -56,7 +60,7 @@ const useProfileForm = callback => {
     try {
       const accessToken = await getTokenSilently();
 
-      const res = await fetch('//localhost:3001/api/user/photoToken', {
+      const res = await fetch(`${apiUrl}/api/user/photoToken`, {
         headers: {
           authorization: `Bearer ${accessToken}`,
         }
@@ -75,7 +79,7 @@ const useProfileForm = callback => {
       });
       const ikJson = await ikRes.json();
 
-      const r = await fetch(`//localhost:3001/api/user`, {
+      const r = await fetch(`${apiUrl}/api/user`, {
         method: 'PATCH',
         headers: {
           authorization: `Bearer ${accessToken}`,
@@ -96,10 +100,84 @@ const useProfileForm = callback => {
     }
   };
 
+  const handleBadgeClick = async e => {
+    e.preventDefault();
+    const city = e.target.dataset.city;
+    if (!city) { return; }
+
+    const newBadges = badges;
+    if (newBadges[city]) {
+      newBadges[city] += 1;
+    } else {
+      newBadges[city] = 1;
+    }
+    setBadges(newBadges);
+
+    try {
+      const accessToken = await getTokenSilently();
+
+      const r = await fetch(`${apiUrl}/api/user`, {
+        method: 'PATCH',
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: user.sub,
+          user_metadata: {
+            badges: newBadges,
+          }
+        })
+      });
+      const data = await r.json();
+      setUser({ ...user, user_metadata: { ...user.user_metadata, badges: data.user.user_metadata.badges } });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleBadgeRemove = async e => {
+    e.preventDefault();
+    const city = e.target.dataset.city;
+    if (!city) { return; }
+
+    const newBadges = badges;
+    if (newBadges[city] && newBadges[city] > 0) {
+      newBadges[city] -= 1;
+    } else {
+      return;
+    }
+    setBadges(newBadges);
+
+    try {
+      const accessToken = await getTokenSilently();
+
+      const r = await fetch(`${apiUrl}/api/user`, {
+        method: 'PATCH',
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: user.sub,
+          user_metadata: {
+            badges: newBadges,
+          }
+        })
+      });
+      const data = await r.json();
+      setUser({ ...user, user_metadata: { ...user.user_metadata, badges: data.user.user_metadata.badges } });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return {
     handleSave,
     handleChangePhoto,
     handlePhoto,
+    handleBadgeClick,
+    handleBadgeRemove,
     name,
     setName,
     email,
@@ -110,14 +188,16 @@ const useProfileForm = callback => {
     setCity,
     fileUploader,
     loadingImg,
+    badges,
   };
 };
 
 const Profile = props => {
   const { loading, user } = useAuth0();
-  const { name, email, setName, setEmail, picture, city, setCity, handleSave, handleChangePhoto, handlePhoto, fileUploader, loadingImg } = useProfileForm();
+  const { name, email, setName, setEmail, picture, city, setCity, handleSave, handleChangePhoto, handlePhoto, fileUploader, loadingImg, handleBadgeClick, handleBadgeRemove, badges } = useProfileForm();
+  const { cities, loading: loadingCities, imageUrl } = useGlobalState();
 
-  if (loading || !user) {
+  if (loadingCities || loading || !user) {
     return <div>Loading...</div>;
   }
 
@@ -125,12 +205,20 @@ const Profile = props => {
     <Fragment>
       <div className="container">
         <div className="row">
-          <div className="col-sm">
-            <img className="img-thumbnail rounded-circle w-25" src={`${picture}?tr=w-400,h-400`} alt="Profile" />
+          <div className="col text-center">
+            <img
+              className="img-thumbnail rounded-circle"
+              src={`${picture || '/public/no_profile.gif'}?tr=w-200,h-200`}
+              srcSet={`${picture || '/public/no_profile.gif'}?tr=w-400,h-400 2x`}
+              alt="Profile" />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col text-center">
               { loadingImg ?
-                <a className="btn btn-link" disabled>Uploading...</a>
+                <a className="btn btn-link" href="#uploading" disabled>Uploading...</a>
                 :
-                <a className="btn btn-link" href="#" onClick={handleChangePhoto}>Change Photo</a>
+                <a className="btn btn-link" href="#change" onClick={handleChangePhoto}>Change Photo</a>
               }
             <input type="file" id="profile-photo" ref={fileUploader} onChange={handlePhoto} style={{display: "none"}} />
           </div>
@@ -154,6 +242,39 @@ const Profile = props => {
               <button type="submit" onClick={handleSave} className="btn btn-primary">Save</button>
             </form>
           </div>
+        </div>
+        <hr />
+        <div className="row">
+          <div className="col-lg">
+            <h3 className="badges-title">Claim Your Badges!</h3>
+            <p className="badges-desc">
+              This is based on an honor system. This is a fun app meant to
+              facilitate virtual traverballing within the November Project
+              community. Please only claim badges for cities you've attended
+              their virtual workout. Cheers!
+            </p>
+          </div>
+        </div>
+        <div className="row">
+          <ul className="col-lg" id="badges">
+            { cities.map( (city, i) =>
+              <li key={i}>
+                <a className={`add ${ badges[city.name] > 0 ? 'has' : '' }`} data-city={city.name} onClick={handleBadgeClick} href="#add">
+                  <img
+                    src={`${imageUrl}${city.image}?tr=w-120,h-120`}
+                    srcSet={`${imageUrl}${city.image}?tr=w-240,h-240 2x`}
+                    alt={city.name}
+                  />
+                  { badges[city.name] && badges[city.name] > 0 ?
+                    <span className="text-primary">{`x${badges[city.name]}`}</span>
+                  : ''}
+                </a>
+                { badges[city.name] && badges[city.name] > 0 ?
+                  <a className="remove" data-city={city.name} onClick={handleBadgeRemove} href="#remove">-</a>
+                : ''}
+              </li>
+            )}
+          </ul>
         </div>
       </div>
     </Fragment>

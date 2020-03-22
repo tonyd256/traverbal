@@ -1,0 +1,25 @@
+.badges-title {
+  text-align: center;
+  margin-bottom: 24px;
+  margin-top: 24px;
+}
+
+#badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+}
+
+#badges li.badge {
+  position: relative;
+  width: 136px;
+  height: 136px;
+  padding: 8px;
+}
+
+#badges li.badge span {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}

@@ -1,0 +1,73 @@
+.leaderboard {
+  list-style: none;
+  padding: 0;
+}
+
+.leaderboard .user > a {
+  display: flex;
+  padding: 12px 0px;
+  justify-content: space-between;
+  border-bottom: 1px lightgrey solid;
+  color: black;
+  text-decoration: none;
+}
+
+.leaderboard .user > div:first-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leaderboard .user .name {
+  margin-left: 8px;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 450px) {
+  .leaderboard .user .name {
+    margin-left: 4px;
+    font-size: .8rem;
+  }
+}
+
+.leaderboard .user .badge-list {
+  white-space: nowrap;
+}
+
+.leaderboard .user .badge-list .badge {
+  position: relative;
+}
+
+.leaderboard .user .badge-list .badge img {
+  width: 60px;
+  height: 60px;
+}
+
+.leaderboard .user .badge-list .badge span {
+  position: absolute;
+  bottom: 12px;
+  right: 8px;
+}
+
+.leaderboard .user .badge-list h3 {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+@media (max-width: 560px) {
+  .drop-sm {
+    display: none;
+  }
+}
+
+@media (max-width: 375px) {
+  .drop-xxs {
+    display: none;
+  }
+}
+
+@media (max-width: 450px) {
+  .leaderboard .user .badge-list h3.drop-xs {
+    display: none;
+  }
+}

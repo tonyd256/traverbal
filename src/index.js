@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import { Auth0Provider } from './auth0';
 import config from './auth_config.json';
 import history from './utils/history';
+import { GlobalStateProvider } from './utils/GlobalState';
 
 // A function that routes the user to the right place
 // after login
@@ -25,8 +26,11 @@ ReactDOM.render(
     audience={config.audience}
     onRedirectCallback={onRedirectCallback}
   >
-    <App />
-  </Auth0Provider>,
+    <GlobalStateProvider>
+      <App />
+    </GlobalStateProvider>
+  </Auth0Provider>
+  ,
   document.getElementById('root')
 );
 
