@@ -30,7 +30,7 @@ module.exports = {
     { "name": "Newport", "image": "Passport_Newport_7fZGdbajL4.png" },
     { "name": "Novi Sad", "image": "Passport_Novi_Sad_20i2VSZV4.png" },
     { "name": "Oakland", "image": "Passport_Oakland_iMYw93cmoV.png" },
-    { "name": "Orlando", "image": "Passport_Orlando_wFe56luTMk.png" },
+    { "name": "Orlando", "image": "Passport_Orlando_8yqMg0eS0.png" },
     { "name": "Ottawa", "image": "Passport_Ottawa_zFSkzNX_v2.png" },
     { "name": "Philadelphia", "image": "Passport_Philadelphia_O9AgSQRnCE.png" },
     { "name": "Phoenix", "image": "Passport_Phoenix_VHLye0zToo.png" },

@@ -1,11 +1,13 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import _ from "lodash";
+import { useAuth0 } from "../auth0";
 import useGlobalState from "../utils/GlobalState";
 
 import "./Leaderboard.css";
 
 const Leaderboard = props => {
+  const { isAuthenticated } = useAuth0();
   const { cities, users, loading, imageUrl } = useGlobalState();
 
   if (loading) {
@@ -20,6 +22,17 @@ const Leaderboard = props => {
             <Link to="/about">What is this website?</Link>
           </div>
         </div>
+        {isAuthenticated && (
+          <div className="row">
+            <div className="col text-center">
+              <p>
+                Cool, I'm in. Now what? Fill in your <Link to="/profile">profile</Link>.
+                Select your traverballed cities by tapping on the icons below your profile.
+                Then check out other's badges by clicking below.
+              </p>
+            </div>
+          </div>
+        )}
         <div className="row">
           <div className="col text-center">
             <h2>Leaderboard</h2>
