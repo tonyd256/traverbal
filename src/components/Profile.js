@@ -37,7 +37,10 @@ const useProfileForm = callback => {
         })
       });
       const data = await r.json();
-      setUser({ ...user, name: data.user.name, email: data.user.email });
+      setName(data.user.name);
+      setEmail(data.user.email);
+      setCity(data.user.user_metadata.city);
+      setUser({ ...user, name: data.user.name, email: data.user.email, user_metadata: { ...user.user_metadata, city: data.user.user_metadata.city } });
     } catch (err) {
       console.error(err);
     }
