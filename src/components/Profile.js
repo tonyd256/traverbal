@@ -14,11 +14,13 @@ const useProfileForm = callback => {
   const [city, setCity] = useState((user.user_metadata && user.user_metadata.city) || '');
   const fileUploader = useRef(null);
   const [loadingImg, setLoadingImg] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const handleSave = async e => {
     e.preventDefault();
 
     try {
+      setSaving(true);
       const accessToken = await getTokenSilently();
 
       const r = await fetch(`${apiUrl}/api/user`, {
@@ -41,8 +43,10 @@ const useProfileForm = callback => {
       setEmail(data.user.email);
       setCity(data.user.user_metadata.city);
       setUser({ ...user, name: data.user.name, email: data.user.email, user_metadata: { ...user.user_metadata, city: data.user.user_metadata.city } });
+      setSaving(false);
     } catch (err) {
       console.error(err);
+      setSaving(false);
     }
   }
 
@@ -192,12 +196,13 @@ const useProfileForm = callback => {
     fileUploader,
     loadingImg,
     badges,
+    saving,
   };
 };
 
 const Profile = props => {
   const { loading, user } = useAuth0();
-  const { name, email, setName, setEmail, picture, city, setCity, handleSave, handleChangePhoto, handlePhoto, fileUploader, loadingImg, handleBadgeClick, handleBadgeRemove, badges } = useProfileForm();
+  const { name, email, setName, setEmail, picture, city, setCity, handleSave, handleChangePhoto, handlePhoto, fileUploader, loadingImg, handleBadgeClick, handleBadgeRemove, badges, saving } = useProfileForm();
   const { cities, loading: loadingCities, imageUrl } = useGlobalState();
 
   if (loadingCities || loading || !user) {
@@ -242,7 +247,7 @@ const Profile = props => {
                 <label htmlFor="city">Home NP City</label>
                 <input type="text" className="form-control" id="city" value={city} onChange={e => setCity(e.target.value) } />
               </div>
-              <button type="submit" onClick={handleSave} className="btn btn-primary">Save</button>
+              <button type="submit" onClick={handleSave} className="btn btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
             </form>
           </div>
         </div>
