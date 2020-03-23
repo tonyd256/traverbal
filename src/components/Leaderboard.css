@@ -18,6 +18,11 @@
   text-overflow: ellipsis;
 }
 
+.leaderboard .user img {
+  width: 60px;
+  height: 60px;
+}
+
 .leaderboard .user .name {
   margin-left: 8px;
   font-size: 1.1rem;

@@ -23,3 +23,8 @@
   bottom: 20px;
   right: 20px;
 }
+
+.profile-image {
+  width: 200px;
+  height: 200px;
+}

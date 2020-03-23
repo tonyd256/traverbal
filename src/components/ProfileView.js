@@ -24,7 +24,7 @@ const ProfileView = props => {
         <div className="row">
           <div className="col text-center">
             <img
-              className="img-thumbnail rounded-circle"
+              className="img-thumbnail rounded-circle profile-image"
               src={`${user.picture || '/public/no_profile.gif'}?tr=w-200,h-200`}
               srcSet={`${user.picture || '/public/no_profile.gif'}?tr=w-400,h-400 2x`}
               alt={user.name}
