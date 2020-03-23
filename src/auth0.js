@@ -43,7 +43,7 @@ export const Auth0Provider = ({
         setLoading(false);
       } catch (err) {
         console.error(err);
-        setErrorMsg('Sorry! Something went wrong. Try to login again or contact Tony.');
+        setErrorMsg('Oops! Something went wrong. Make sure you\'re opening up the email link into the same browser you requested it from. Also, make sure you\'re not on a private tab. You could try to copy the link from the email and put it into the browser manualy otherwisee try to login again or contact Tony (SF).');
         setLoading(false);
       }
     };
