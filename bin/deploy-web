@@ -2,3 +2,6 @@
 
 yarn build
 aws s3 cp build s3://traverbal.november-project.com/ --recursive --exclude ".DS_Store"
+aws cloudfront create-invalidation \
+    --distribution-id E27363CUSPPDSA \
+    --paths "/*"
