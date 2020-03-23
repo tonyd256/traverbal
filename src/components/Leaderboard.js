@@ -54,7 +54,7 @@ const Leaderboard = props => {
                       src={`${user.picture || '/public/no_profile.gif'}?tr=w-50,h-50`}
                       srcSet={`${user.picture || '/public/no_profile.gif'}?tr=w-100,h-100 2x`}
                       alt={user.name} />
-                    <span className="name">{`${user.name} (${user.city})`}</span>
+                    <span className="name">{`${user.name}${user.city ? ' ('+user.city+')' : ''}`}</span>
                   </div>
                   <div className="badge-list">
                     { _.take(_.reverse(_.filter(_.sortBy(

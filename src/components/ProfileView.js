@@ -35,7 +35,9 @@ const ProfileView = props => {
         <div className="row">
           <div className="col text-center">
             <h2>{user.name}</h2>
-            <span>{user.city}</span>
+            {user.city ? (
+              <span>{user.city}</span>
+            ) : ''}
           </div>
         </div>
         <hr />
