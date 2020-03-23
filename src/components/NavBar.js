@@ -6,7 +6,7 @@ const NavBar = () => {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   return (
-    <nav role="navigation" className="navbar fixed-top navbar-light bg-light">
+    <nav role="navigation" className="navbar navbar-expand-md fixed-top navbar-light bg-light">
       <a className="navbar-brand" href="/">Traverbal</a>
 
       {isAuthenticated && (
@@ -21,7 +21,7 @@ const NavBar = () => {
 
       {isAuthenticated && (
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
+          <ul className="navbar-nav ml-auto">
             <li className="nav-item active">
               <Link className="nav-link" to="/">Leaderboard <span className="sr-only">(current)</span></Link>
             </li>
