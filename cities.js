@@ -51,6 +51,6 @@ module.exports = {
     { "name": "Worcester", "image": "Passport_Worcester_j3_zE6aFI.png" },
     { "name": "Rochester", "image": "Passport_Rochester_WWxSi9jtd_.png" },
     { "name": "Toulouse", "image": "Passport_Toulouse_2FEy64sjPL.png" },
-    { "name": "Colombus", "image": "Passport_Colombus_9Dm5Xjund.png" },
+    { "name": "Columbus", "image": "Passport_Columbus_aR30uLJ_R.png" },
   ]
 };
