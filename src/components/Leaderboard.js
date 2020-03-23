@@ -60,10 +60,12 @@ const Leaderboard = props => {
                     { _.take(_.reverse(_.filter(_.sortBy(
                       Object.keys(user.badges)
                       .map( b => ({ key: b, value: user.badges[b] })), 'value'), b => b.value > 0)), 4)
-                      .map( (b, i) => {
+                      .reduce( (accum, b, i) => {
                         if (i < 3) {
-                          const image = _.find(cities, { name: b.key }).image;
-                          return (
+                          const c = _.find(cities, { name: b.key });
+                          if (!c) { console.log(c); return accum; }
+                          const image = c.image;
+                          return [...accum, (
                             <div className={`badge ${ i === 2 ? 'drop-sm' : ''} ${ i === 1 ? 'drop-xxs' : ''}`} key={i}>
                               <img
                                 src={`${imageUrl}${image}?tr=w-60,h-60`}
@@ -71,13 +73,13 @@ const Leaderboard = props => {
                                 alt={b.key} />
                               <span className="text-primary">{`x${b.value}`}</span>
                             </div>
-                          );
+                          )];
                         } else {
-                          return (
+                          return [...accum, (
                             <h3 key={i} className="text-primary drop-xs">+</h3>
-                          );
+                          )];
                         }
-                      })
+                      }, [])
                     }
                   </div>
                 </Link></li>

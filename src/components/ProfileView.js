@@ -53,7 +53,9 @@ const ProfileView = props => {
               .map( b => ({ key: b, value: user.badges[b] })), 'value'))
               .reduce( (accum, b, i) => {
                 if (b.value < 1) { return accum; }
-                const image = _.find(cities, { name: b.key }).image;
+                const c = _.find(cities, { name: b.key });
+                if (!c) { return accum; }
+                const image = c.image;
                 return [ ...accum, (
                   <li className='badge' key={i}>
                     <img
