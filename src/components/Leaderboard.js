@@ -30,7 +30,8 @@ const Leaderboard = props => {
           <div className="row">
             <div className="col text-center">
               <p>
-                Cool, I'm in. Now what? Fill in your <Link to="/profile">profile</Link>.
+                Cool, I'm in. Now what? Fill in your <Link to="/profile">profile</Link>,
+                especially <strong>change your name so it's not your email!</strong>&nbsp;
                 Select your traverballed cities by tapping on the icons below your profile.
                 Then check out other's badges by clicking below.
               </p>
