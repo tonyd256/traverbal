@@ -86,8 +86,19 @@ app.get("/api/cities", async (req, res) => {
 
 app.get("/api/users", async (req, res) => {
   try {
-    const users = await auth0.getUsers();
-    const us = users.reduce( (accum, user) => {
+    let allUsers = [];
+    let i = 0;
+
+    while (true) {
+      const users = await auth0.getUsers({ per_page: 100, page: i });
+      allUsers = [...allUsers, ...users];
+      if (users.length < 100 || i === 10) {
+        break;
+      }
+      i++;
+    }
+
+    const us = allUsers.reduce( (accum, user) => {
       if (user.user_metadata && user.user_metadata.badges) {
         return [ ...accum, {
           id: user.user_id,
