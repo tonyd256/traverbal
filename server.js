@@ -34,7 +34,7 @@ const checkJwt = jwt({
 
   audience: authConfig.audience,
   issuer: `https://${authConfig.domain}/`,
-  algorithm: ["RS256"]
+  algorithms: ["RS256"]
 });
 
 const auth0 = new Auth0.ManagementClient({
